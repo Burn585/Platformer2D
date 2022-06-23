@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PhysicsMovement : MonoBehaviour
 {
+    [SerializeField] private float _speed = 1;
+
     public float MinGroundNormalY = .65f;
     public float GravityModifier = 1f;
     public Vector2 Velocity;
@@ -14,6 +16,7 @@ public class PhysicsMovement : MonoBehaviour
     protected bool grounded;
     protected Vector2 groundNormal;
     protected Rigidbody2D rb2d;
+    protected SpriteRenderer spriteRenderer;
     protected ContactFilter2D contactFilter;
     protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
     protected List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>(16);
@@ -24,6 +27,7 @@ public class PhysicsMovement : MonoBehaviour
     void OnEnable()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
@@ -37,6 +41,12 @@ public class PhysicsMovement : MonoBehaviour
     {
         targetVelocity = new Vector2(Input.GetAxis("Horizontal"), 0);
 
+        if (targetVelocity.x > 0)
+            spriteRenderer.flipX = true;
+
+        if (targetVelocity.x < 0)
+            spriteRenderer.flipX = false;
+
         if (Input.GetKey(KeyCode.Space) && grounded)
             Velocity.y = 5;
     }
@@ -44,7 +54,7 @@ public class PhysicsMovement : MonoBehaviour
     void FixedUpdate()
     {
         Velocity += GravityModifier * Physics2D.gravity * Time.deltaTime;
-        Velocity.x = targetVelocity.x;
+        Velocity.x = targetVelocity.x * _speed;
 
         grounded = false;
 
