@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RespawnCoin : MonoBehaviour
 {
-    [SerializeField] private GameObject _coinPrefab;
+    [SerializeField] private Coin _coinPrefab;
 
     private void Start()
     {

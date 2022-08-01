@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Enemy))]
+
 public class Death : MonoBehaviour
 {
     [SerializeField] private Transform _spawnPlayer;
 
     private Animator _animator;
+    private int _animateDeath;
 
     public bool DeathPlayer { get; private set; }
 
@@ -14,13 +18,14 @@ public class Death : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         DeathPlayer = false;
+        _animateDeath = Animator.StringToHash("Death");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<Enemy>())
         {
-            _animator.SetTrigger("Death");
+            _animator.SetTrigger(_animateDeath);
             DeathPlayer = true;
 
             StartCoroutine(Respawn());

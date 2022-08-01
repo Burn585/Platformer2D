@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Death))]
+
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float _runSpeed = 1;
@@ -13,6 +18,7 @@ public class Movement : MonoBehaviour
     private Animator _animator;
     private bool _isGround = true;
     private Death _death;
+    private int _animateRun;
 
     private void Start()
     {
@@ -20,6 +26,8 @@ public class Movement : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _death = GetComponent<Death>();
+
+        _animateRun = Animator.StringToHash("Run");
     }
 
     private void Update()
@@ -55,11 +63,11 @@ public class Movement : MonoBehaviour
     {
         if (_horizontalMove == 0)
         {
-            _animator.SetBool("Run", false);
+            _animator.SetBool(_animateRun, false);
         }
         else
         {
-            _animator.SetBool("Run", true);
+            _animator.SetBool(_animateRun, true);
         }
     }
 
